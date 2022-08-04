@@ -71,4 +71,89 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id: 10,
+    title: "dinner steak",
+    category: "dinner",
+    price: 39.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
+
+const sectionCenter = document.querySelector('.section-center');
+const containerBtns = document.querySelector('.btn-container');
+
+
+window.addEventListener('DOMContentLoaded', function() {
+  displayMenuItems(menu);
+  displayFilterButtons();
+});
+
+// displayMenuItems
+function displayMenuItems(menu) {
+  let displayMenu = menu.map(function(item) {
+    // console.log(item);
+
+    return `
+    <!-- single item -->
+    <article class="menu-item">
+      <img src="${item.img}" alt="menu-item" class="photo">
+      <div class="item-info">
+        <header>
+          <h4>${item.title}</h4>
+          <h4 class="price">$${item.price}</h4>
+        </header>
+        <p>${item.desc}</p>
+      </div>
+    </article>
+    <!-- end of single item -->`;
+  })
+  displayMenu = displayMenu.join("");
+  sectionCenter.innerHTML = displayMenu;
+  // console.log(displayMenu);
+}
+
+// display filter buttons
+function displayFilterButtons() {
+  const categories = menu.reduce(
+    function(values, item) {
+      if (!values.includes(item.category)) {
+        values.push(item.category);
+      }
+      return values;
+    },
+    ['all']
+  );
+  // console.log(categories);
+
+  const categoryBtns = categories.map(function(category) {
+    return `
+    <button type="button" class="filter-btn" data-id="${category}">${category}</button>
+    `;
+  }).join("");
+
+  containerBtns.innerHTML = categoryBtns;
+  const btnsFilter = document.querySelectorAll('.filter-btn');
+
+  btnsFilter.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      // console.log(e.currentTarget.dataset.id);
+      const category = e.currentTarget.dataset.id;
+      const menuCategory = menu.filter(function(menuItem) {
+        // console.log(menuItem.category);
+        // console.log(menuItem);
+        if (menuItem.category === category) {
+          return menuItem;
+        };
+      });
+  
+      if (category === 'all') {
+        displayMenuItems(menu);
+      } else {
+        displayMenuItems(menuCategory);
+      };
+      // console.log(menuCategory);
+    });
+  });
+}
